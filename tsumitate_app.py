@@ -112,10 +112,23 @@ st.markdown(f"**期待年利 {annual_rate*100:.1f}% で {years}年後**")
 st.subheader("資産推移グラフ（年単位）")
 
 import matplotlib.font_manager as fm
+import matplotlib.pyplot as plt
+import os
 
-# 日本語対応フォントを指定（Windows標準のMS Gothic / Meiryo など）
-plt.rcParams['font.family'] = 'Meiryo'          # または 'Yu Gothic', 'MS Gothic'
-plt.rcParams['axes.unicode_minus'] = False     # マイナス記号の文字化け防止
+font_dir = os.path.join(os.getcwd(), 'fonts')  # Cloudではos.getcwd()がアプリルート
+font_path = os.path.join(font_dir, 'NotoSansJP-VariableFont_wght.ttf')
+
+try:
+    if os.path.exists(font_path):
+        fm.fontManager.addfont(font_path)
+        prop = fm.FontProperties(fname=font_path)
+        plt.rcParams['font.family'] = prop.get_name()
+        plt.rcParams['axes.unicode_minus'] = False
+        print("Noto Sans JP loaded successfully!")  # ログに出る
+    else:
+        print(f"Font not found at: {font_path}")
+except Exception as e:
+    print(f"Font loading error: {e}")
 
 fig, ax = plt.subplots(figsize=(10, 5))
 sns.lineplot(data=df, x="年", y="積立総額", label="積立総額", ax=ax, linewidth=2)
@@ -132,5 +145,6 @@ with st.expander("年ごとの詳細テーブルを見る"):
         "資産評価額": "{:,.0f}",
         "運用益": "{:,.0f}"
     }))
+
 
 st.caption("※これは単純化したモデルです。実際の投資では為替・手数料・変動リスク・税制変更等を考慮してください")
