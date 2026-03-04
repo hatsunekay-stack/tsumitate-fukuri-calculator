@@ -7,7 +7,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-st.set_page_config(page_title="積立複利計算機（米国株向け）", layout="wide")
+st.set_page_config(page_title="無料！毎月積立×複利シミュレーション（NISA対応）", layout="wide")
 
 st.title("自分用 積立複利シミュレーション（ドルコスト平均法）")
 st.caption("毎月積立 × 複利運用　の資産推移を計算します")
@@ -136,6 +136,8 @@ sns.lineplot(data=df, x="年", y="資産評価額", label="資産評価額（複
 ax.fill_between(df["年"], df["積立総額"], df["資産評価額"], alpha=0.15, color="green")
 ax.legend()
 ax.grid(True, alpha=0.3)
+ax.ticklabel_format(style='plain', axis='y')
+ax.set_ylabel("積立額 (円)")
 st.pyplot(fig)
 
 # 詳細テーブル（任意で表示）
@@ -148,3 +150,4 @@ with st.expander("年ごとの詳細テーブルを見る"):
 
 
 st.caption("※これは単純化したモデルです。実際の投資では為替・手数料・変動リスク・税制変更等を考慮してください")
+
